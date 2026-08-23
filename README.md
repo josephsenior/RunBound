@@ -1,5 +1,9 @@
 # RunBound
 
+[![CI](https://github.com/josephsenior/RunBound/actions/workflows/ci.yml/badge.svg)](https://github.com/josephsenior/RunBound/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+
 Run subprocesses without allowing unlimited output, wall time, or abandoned
 child processes.
 
@@ -8,6 +12,36 @@ automation service that executes commands it does not completely control. It
 originated in and was battle-tested by Grinta.
 
 Its dependency-free core supports Windows, Linux, and macOS.
+
+## Why RunBound?
+
+Unbounded subprocesses are a reliability problem for automation: a command can
+hang, fill a pipe, leak descendants, or produce more output than the caller can
+store. RunBound provides a small, dependency-free execution layer with explicit
+limits and structured results.
+
+Use it when you need to:
+
+- run commands from an agent, worker, test runner, or CI service;
+- enforce wall-time and independent stdout/stderr byte limits; or
+- manage a long-lived development server and verify that it is healthy.
+
+RunBound is a process-management library, not a security sandbox. See
+[Security](#security) before running untrusted commands.
+
+## Install
+
+RunBound requires Python 3.10 or newer. Install the released package with:
+
+```console
+python -m pip install runbound
+```
+
+For a source checkout with development tools:
+
+```console
+python -m pip install -e ".[dev]"
+```
 
 ## CLI
 
@@ -70,6 +104,13 @@ never supplied for password prompts.
 RunBound does not impose CPU, address-space, filesystem, or network isolation.
 Those require an OS sandbox or container appropriate to the host application.
 
+## Security
+
+RunBound executes commands with the permissions of its caller and does not
+provide isolation. Treat command strings, environment variables, working
+directories, and inherited file descriptors as trusted inputs unless you add a
+separate sandbox. See [SECURITY.md](SECURITY.md) for vulnerability reporting.
+
 ## Development
 
 ```console
@@ -78,6 +119,17 @@ python -m ruff check .
 python -m pytest -q
 python -m build
 ```
+
+The test suite is intentionally cross-platform. Before opening a pull request,
+run the same checks locally with pytest plugin autoloading disabled so unrelated
+global plugins cannot affect the result:
+
+```console
+$env:PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1"  # PowerShell
+python -m pytest -q
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the pull request workflow.
 
 RunBound originated in and was battle-tested by
 [Grinta](https://github.com/josephsenior/Grinta-Coding-Agent).

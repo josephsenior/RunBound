@@ -1,0 +1,42 @@
+name: Bug report
+description: Report a reproducible problem with RunBound
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include credentials, private source code, or sensitive command output.
+  - type: input
+    id: version
+    attributes:
+      label: RunBound version or commit
+      placeholder: "0.1.0 or 7fa87fe"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Python and operating system
+      placeholder: "Python 3.12.4 on Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include the smallest safe command or Python snippet that demonstrates the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
